@@ -45,7 +45,7 @@ var BarGraphForm = function (_React$Component) {
                     React.createElement(
                         "label",
                         { "for": "vertical" },
-                        "Vertical: "
+                        " Vertical: "
                     ),
                     React.createElement("input", { type: "radio", id: "vertical", name: "orientation", value: "vertical" }),
                     React.createElement(
