@@ -20,8 +20,10 @@ class BarGraphForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <label>
-                    Graph orientation
+                    Graph orientation |
+                    <label for="vertical">Vertical: </label>
                     <input type="radio" id="vertical" name="orientation" value="vertical" />
+                    <label for="horizontal">Horizontal: </label>
                     <input type="radio" id="horizontal" name="orientation" value="horizontal" />
                 </label>
             </form>
