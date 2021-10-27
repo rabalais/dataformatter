@@ -23,7 +23,7 @@ class BarGraphForm extends React.Component {
                     Graph orientation | 
                     <label for="vertical"> Vertical: </label>
                     <input type="radio" id="vertical" name="orientation" value="vertical" />
-                    <label for="horizontal">Horizontal: </label>
+                    <label for="horizontal"> Horizontal: </label>
                     <input type="radio" id="horizontal" name="orientation" value="horizontal" />
                 </label>
             </form>
