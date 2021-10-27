@@ -1,3 +1,5 @@
+"use strict";
+
 class BarGraphForm extends React.Component {
     constructor(props) {
         super(props);
@@ -30,4 +32,4 @@ class BarGraphForm extends React.Component {
 }
 
 const domContainer = document.querySelector("#settings-form-react");
-ReactDOM.render(<BarGraphForm />, document.getElementById('root'));
+ReactDOM.render(<BarGraphForm />, domContainer);
