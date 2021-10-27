@@ -87,6 +87,10 @@ header div {
     border-radius: 15px;
 }
 
+#settings-form-react {
+    padding: 20px;
+}
+
 #settings-form {
     padding: 20px;
 }
