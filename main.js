@@ -1,33 +1,56 @@
-class BarGraphForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: "" };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BarGraphForm = function (_React$Component) {
+    _inherits(BarGraphForm, _React$Component);
+
+    function BarGraphForm(props) {
+        _classCallCheck(this, BarGraphForm);
+
+        var _this = _possibleConstructorReturn(this, (BarGraphForm.__proto__ || Object.getPrototypeOf(BarGraphForm)).call(this, props));
+
+        _this.state = { value: "" };
+
+        _this.handleChange = _this.handleChange.bind(_this);
+        _this.handleSubmit = _this.handleSubmit.bind(_this);
+        return _this;
     }
 
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
+    _createClass(BarGraphForm, [{
+        key: "handleChange",
+        value: function handleChange(event) {
+            this.setState({ value: event.target.value });
+        }
+    }, {
+        key: "handleSubmit",
+        value: function handleSubmit(event) {
+            alert("place holder for do stuff to canvas");
+            event.preventDefault();
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "form",
+                { onSubmit: this.handleSubmit },
+                React.createElement(
+                    "label",
+                    null,
+                    "Graph orientation",
+                    React.createElement("input", { type: "radio", id: "vertical", name: "orientation", value: "vertical" }),
+                    React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", value: "horizontal" })
+                )
+            );
+        }
+    }]);
 
-    handleSubmit(event) {
-        alert("place holder for do stuff to canvas");
-        event.preventDefault();
-    }
+    return BarGraphForm;
+}(React.Component);
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Graph orientation
-                    <input type="radio" id="vertical" name="orientation" value="vertical" />
-                    <input type="radio" id="horizontal" name="orientation" value="horizontal" />
-                </label>
-            </form>
-        );
-    }
-}
-
-const domContainer = document.querySelector("#settings-form-react");
-ReactDOM.render(<BarGraphForm />, domContainer);
+var domContainer = document.querySelector("#settings-form-react");
+ReactDOM.render(React.createElement(BarGraphForm, null), domContainer);
