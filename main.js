@@ -1,5 +1,3 @@
-"use strict";
-
 class BarGraphForm extends React.Component {
     constructor(props) {
         super(props);
