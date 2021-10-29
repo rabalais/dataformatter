@@ -1,5 +1,7 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -14,17 +16,46 @@ var BarGraphForm = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (BarGraphForm.__proto__ || Object.getPrototypeOf(BarGraphForm)).call(this, props));
 
-        _this.state = { value: "" };
+        _this.state = {
+            orientation: "vertical",
+            numberOfBars: 0,
+            barNames: [],
+            barColors: []
+        };
 
         _this.handleChange = _this.handleChange.bind(_this);
         _this.handleSubmit = _this.handleSubmit.bind(_this);
+        _this.generateColorFields = _this.generateColorFields.bind(_this);
         return _this;
     }
 
     _createClass(BarGraphForm, [{
         key: "handleChange",
         value: function handleChange(event) {
-            this.setState({ value: event.target.value });
+            var target = event.target;
+            var value = target.value;
+            var name = target.name;
+
+            if (name === "barColors") {
+                barColors.push(this.setState({ "barColors": value }));
+                console.log(barColors);
+            } else {
+                this.setState(_defineProperty({}, name, value));
+            }
+            console.log(_defineProperty({}, name, value));
+        }
+    }, {
+        key: "generateColorFields",
+        value: function generateColorFields(event) {
+            this.setState({ numberOfBars: event.target.value });
+            var numColors = [];
+            var input = event.target.value;
+            for (var i = 1; i <= input; i++) {
+                numColors.push(i);
+            }
+
+            var colorsContainer = document.querySelector("#colors");
+            ReactDOM.render(React.createElement(ColorFields, { numColors: numColors, value: this.state.changed, onChange: this.handleChange }), colorsContainer);
         }
     }, {
         key: "handleSubmit",
@@ -40,24 +71,35 @@ var BarGraphForm = function (_React$Component) {
                 { onSubmit: this.handleSubmit },
                 React.createElement(
                     "label",
-                    null,
-                    "Graph orientation",
+                    { className: "category-title" },
+                    "Graph orientation"
+                ),
+                React.createElement(
+                    "div",
+                    { className: "category", onChange: this.handleChange },
                     React.createElement(
-                        "div",
-                        { style: "border: solid; border-width: 1px;" },
-                        React.createElement(
-                            "label",
-                            { "for": "vertical" },
-                            " Vertical: "
-                        ),
-                        React.createElement("input", { type: "radio", id: "vertical", name: "orientation", value: "vertical" }),
-                        React.createElement(
-                            "label",
-                            { "for": "horizontal" },
-                            " Horizontal: "
-                        ),
-                        React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", value: "horizontal" })
-                    )
+                        "label",
+                        { "for": "vertical" },
+                        " Vertical: "
+                    ),
+                    React.createElement("input", { type: "radio", id: "vertical", name: "orientation", required: true, defaultChecked: true, value: "vertical" }),
+                    React.createElement(
+                        "label",
+                        { "for": "horizontal" },
+                        " Horizontal: "
+                    ),
+                    React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", required: true, value: "horizontal" })
+                ),
+                React.createElement(
+                    "div",
+                    { className: "category" },
+                    React.createElement(
+                        "label",
+                        { "for": "number-of-bars" },
+                        " Number of Bars: "
+                    ),
+                    React.createElement("input", { type: "number", id: "number-of-bars", name: "number-of-bars", min: "1", value: this.state.numberOfBars, onChange: this.generateColorFields }),
+                    React.createElement("div", { id: "colors" })
                 )
             );
         }
@@ -65,6 +107,21 @@ var BarGraphForm = function (_React$Component) {
 
     return BarGraphForm;
 }(React.Component);
+
+function ColorInput(props) {
+    return React.createElement("input", { type: "color", name: "barColors" });
+}
+
+function ColorFields(props, value, changed) {
+    var numColors = props.numColors;
+
+    console.log(numColors);
+    return numColors.map(function (number, index) {
+        return React.createElement(ColorInput, { id: "barcolor_" + index.toString(), key: "barcolor_" + index.toString(), value: value, onChange: function onChange() {
+                changed;
+            } });
+    });
+}
 
 var domContainer = document.querySelector("#settings-form-react");
 ReactDOM.render(React.createElement(BarGraphForm, null), domContainer);

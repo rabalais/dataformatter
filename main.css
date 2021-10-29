@@ -106,3 +106,19 @@ header div {
 #save-to-pdf:hover {
     background-color: rgb(0, 69, 126);
 }
+
+div.category {
+    border-top: solid;
+    display: flex;
+    border-width: 1px;
+    padding: 10px;
+    border-color: rgb(187, 187, 187);
+}
+
+label.category-title {
+    font-weight: bold;
+}
+
+#colors input {
+    margin: 0 4px 0 4px;
+}
