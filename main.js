@@ -36,9 +36,14 @@ var BarGraphForm = function (_React$Component) {
             var value = target.value;
             var name = target.name;
 
-            if (name === "barColors") {
-                barColors.push(this.setState({ "barColors": value }));
-                console.log(barColors);
+            if (target.type === "color") {
+                if (this.state.barColors.indexOf(target.id) == -1) {
+                    var item = this.state.barColors.indexOf(target.id);
+                    this.state.barColors.splice(item, item + 1);
+                    this.setState({ barColors: [this.state.barColors, [target.id, value]] });
+                } else {
+                    this.setState({ barColors: [this.state.barColors, [target.id, value]] });
+                }
             } else {
                 this.setState(_defineProperty({}, name, value));
             }
@@ -55,7 +60,7 @@ var BarGraphForm = function (_React$Component) {
             }
 
             var colorsContainer = document.querySelector("#colors");
-            ReactDOM.render(React.createElement(ColorFields, { numColors: numColors, value: this.state.changed, onChange: this.handleChange }), colorsContainer);
+            ReactDOM.render(React.createElement(ColorFields, { numColors: numColors, value: this.state.barColors, onInput: this.handleChange }), colorsContainer);
         }
     }, {
         key: "handleSubmit",
@@ -109,17 +114,15 @@ var BarGraphForm = function (_React$Component) {
 }(React.Component);
 
 function ColorInput(props) {
-    return React.createElement("input", { type: "color", name: "barColors" });
+    return React.createElement("input", { type: "color", name: "barColors", value: props.value, id: props.id, onInput: props.onInput });
 }
 
-function ColorFields(props, value, changed) {
+function ColorFields(props) {
     var numColors = props.numColors;
 
     console.log(numColors);
     return numColors.map(function (number, index) {
-        return React.createElement(ColorInput, { id: "barcolor_" + index.toString(), key: "barcolor_" + index.toString(), value: value, onChange: function onChange() {
-                changed;
-            } });
+        return React.createElement(ColorInput, { id: "barcolor_" + index.toString(), key: "barcolor_" + index.toString(), onInput: props.onInput });
     });
 }
 
