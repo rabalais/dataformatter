@@ -8,25 +8,92 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var BarGraphForm = function (_React$Component) {
-    _inherits(BarGraphForm, _React$Component);
+// npx babel --watch src --out-dir . --presets react-app/prod
+
+var GraphType = function (_React$Component) {
+    _inherits(GraphType, _React$Component);
+
+    function GraphType(props) {
+        _classCallCheck(this, GraphType);
+
+        var _this = _possibleConstructorReturn(this, (GraphType.__proto__ || Object.getPrototypeOf(GraphType)).call(this, props));
+
+        _this.state = { value: "" };
+
+        _this.handleChange = _this.handleChange.bind(_this);
+        return _this;
+    }
+
+    _createClass(GraphType, [{
+        key: "handleChange",
+        value: function handleChange(event) {
+            this.setState({ value: event.target.value });
+
+            var target = event.target;
+            console.log(target);
+            var container = document.querySelector("#settings-form-react");
+            switch (target.value) {
+                case "bargraph":
+                    ReactDOM.render(React.createElement(BarGraphForm, null), container);
+                    console.log("Loaded bar graph");
+                    break;
+                case "piechart":
+                    console.log("Loaded pie chart");
+                    break;
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "form",
+                { id: "settings-form" },
+                React.createElement(
+                    "h4",
+                    null,
+                    "Select a graph to get started"
+                ),
+                React.createElement(
+                    "label",
+                    { "for": "graph-type" },
+                    "Graph Type: "
+                ),
+                React.createElement(
+                    "select",
+                    { value: this.state.value, onChange: this.handleChange },
+                    React.createElement("option", { disabled: true, hidden: true, value: "" }),
+                    React.createElement(
+                        "option",
+                        { value: "bargraph" },
+                        "Bar Graph"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return GraphType;
+}(React.Component);
+
+var BarGraphForm = function (_React$Component2) {
+    _inherits(BarGraphForm, _React$Component2);
 
     function BarGraphForm(props) {
         _classCallCheck(this, BarGraphForm);
 
-        var _this = _possibleConstructorReturn(this, (BarGraphForm.__proto__ || Object.getPrototypeOf(BarGraphForm)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (BarGraphForm.__proto__ || Object.getPrototypeOf(BarGraphForm)).call(this, props));
 
-        _this.state = {
+        _this2.state = {
             orientation: "vertical",
             numberOfBars: 0,
             barNames: [],
-            barColors: []
+            barColors_: []
         };
 
-        _this.handleChange = _this.handleChange.bind(_this);
-        _this.handleSubmit = _this.handleSubmit.bind(_this);
-        _this.generateColorFields = _this.generateColorFields.bind(_this);
-        return _this;
+        _this2.handleChange = _this2.handleChange.bind(_this2);
+        _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+        _this2.generateColorFields = _this2.generateColorFields.bind(_this2);
+        return _this2;
     }
 
     _createClass(BarGraphForm, [{
@@ -35,19 +102,23 @@ var BarGraphForm = function (_React$Component) {
             var target = event.target;
             var value = target.value;
             var name = target.name;
+            var id = target.id;
 
             if (target.type === "color") {
-                if (this.state.barColors.indexOf(target.id) == -1) {
-                    var item = this.state.barColors.indexOf(target.id);
-                    this.state.barColors.splice(item, item + 1);
-                    this.setState({ barColors: [this.state.barColors, [target.id, value]] });
+                if (typeof this.state.barColors_[id] === "undefined") {
+                    console.log("pushed new value");
+                    this.state.barColors_[id] = value;
+                    this.setState({ barColors_: this.state.barColors_ });
                 } else {
-                    this.setState({ barColors: [this.state.barColors, [target.id, value]] });
+                    var newValue = this.state.barColors_[id] = value;
+                    this.state.barColors_.splice(id, newValue);
+                    this.setState({ barColors_: this.state.barColors_ });
+                    console.log("changed old value");
                 }
             } else {
                 this.setState(_defineProperty({}, name, value));
             }
-            console.log(_defineProperty({}, name, value));
+            console.log(_defineProperty({}, target.id, value));
         }
     }, {
         key: "generateColorFields",
@@ -57,10 +128,11 @@ var BarGraphForm = function (_React$Component) {
             var input = event.target.value;
             for (var i = 1; i <= input; i++) {
                 numColors.push(i);
+                this.state.barColors_[i - 1] = "#000000";
+                this.setState({ barColors_: this.state.barColors_ });
             }
-
             var colorsContainer = document.querySelector("#colors");
-            ReactDOM.render(React.createElement(ColorFields, { numColors: numColors, value: this.state.barColors, onInput: this.handleChange }), colorsContainer);
+            ReactDOM.render(React.createElement(MapColorFields, { numColors: numColors, onChange: this.handleChange, name: "barColors_" }), colorsContainer);
         }
     }, {
         key: "handleSubmit",
@@ -75,25 +147,19 @@ var BarGraphForm = function (_React$Component) {
                 "form",
                 { onSubmit: this.handleSubmit },
                 React.createElement(
-                    "label",
+                    "h4",
                     { className: "category-title" },
                     "Graph orientation"
                 ),
                 React.createElement(
                     "div",
-                    { className: "category", onChange: this.handleChange },
-                    React.createElement(
-                        "label",
-                        { "for": "vertical" },
-                        " Vertical: "
-                    ),
-                    React.createElement("input", { type: "radio", id: "vertical", name: "orientation", required: true, defaultChecked: true, value: "vertical" }),
-                    React.createElement(
-                        "label",
-                        { "for": "horizontal" },
-                        " Horizontal: "
-                    ),
-                    React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", required: true, value: "horizontal" })
+                    { className: "category" },
+                    React.createElement(GraphOrientation, { onChange: this.handleChange })
+                ),
+                React.createElement(
+                    "h4",
+                    { className: "category-title" },
+                    "Bar settings"
                 ),
                 React.createElement(
                     "div",
@@ -101,9 +167,18 @@ var BarGraphForm = function (_React$Component) {
                     React.createElement(
                         "label",
                         { "for": "number-of-bars" },
-                        " Number of Bars: "
+                        " Number of Bars:\xA0"
                     ),
-                    React.createElement("input", { type: "number", id: "number-of-bars", name: "number-of-bars", min: "1", value: this.state.numberOfBars, onChange: this.generateColorFields }),
+                    React.createElement("input", { type: "number", id: "number-of-bars", name: "number-of-bars", min: "1", value: this.state.numberOfBars, onChange: this.generateColorFields })
+                ),
+                React.createElement(
+                    "div",
+                    { className: "category" },
+                    React.createElement(
+                        "label",
+                        { "for": "colors" },
+                        " Colors:  "
+                    ),
                     React.createElement("div", { id: "colors" })
                 )
             );
@@ -113,18 +188,41 @@ var BarGraphForm = function (_React$Component) {
     return BarGraphForm;
 }(React.Component);
 
-function ColorInput(props) {
-    return React.createElement("input", { type: "color", name: "barColors", value: props.value, id: props.id, onInput: props.onInput });
+function GraphOrientation(props) {
+    return React.createElement(
+        "div",
+        { onChange: props.onChange },
+        React.createElement(
+            "label",
+            { "for": "vertical" },
+            " Vertical:\xA0"
+        ),
+        React.createElement("input", { type: "radio", id: "vertical", name: "orientation", required: true, defaultChecked: true, value: "vertical" }),
+        React.createElement(
+            "label",
+            { "for": "horizontal" },
+            " Horizontal:\xA0"
+        ),
+        React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", required: true, value: "horizontal" })
+    );
 }
 
-function ColorFields(props) {
+function ColorInput(props) {
+    return React.createElement("input", { type: "color", name: props.value, value: props.value, id: props.id, onChange: props.onChange });
+}
+
+function MapColorFields(props) {
     var numColors = props.numColors;
 
     console.log(numColors);
     return numColors.map(function (number, index) {
-        return React.createElement(ColorInput, { id: "barcolor_" + index.toString(), key: "barcolor_" + index.toString(), onInput: props.onInput });
+        return React.createElement(ColorInput, { name: props.name + index.toString(), id: index.toString(), key: props.name + index.toString(), defaultValue: "#000000", onChange: props.onChange });
     });
 }
 
-var domContainer = document.querySelector("#settings-form-react");
-ReactDOM.render(React.createElement(BarGraphForm, null), domContainer);
+function LabelInput(props) {
+    return React.createElement("input", { type: "text", name: "LabelInput" });
+}
+
+var domContainer = document.querySelector("#graph-select");
+ReactDOM.render(React.createElement(GraphType, null), domContainer);
