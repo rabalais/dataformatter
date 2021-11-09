@@ -114,8 +114,7 @@ var BarGraphForm = function (_React$Component2) {
                     this.setState({ barColors_: this.state.barColors_ });
                     console.log("changed old value");
                 }
-            }
-            if (target.type === "text") {
+            } else if (target.type === "text") {
                 var _id2 = target.id.slice(-1);
                 if (_typeof(this.state.barNames[_id2])) {
                     var _newValue = this.state.barNames[_id2] = value;

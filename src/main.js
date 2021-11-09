@@ -71,7 +71,7 @@ class BarGraphForm extends React.Component {
                 console.log("changed old value");
             }
         }
-        if (target.type === "text") {
+        else if (target.type === "text") {
             let id = target.id.slice(-1);
             if (typeof this.state.barNames[id]) {
                 let newValue = (this.state.barNames[id] = value);
