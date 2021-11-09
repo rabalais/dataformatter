@@ -1,3 +1,5 @@
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -92,7 +94,7 @@ var BarGraphForm = function (_React$Component2) {
 
         _this2.handleChange = _this2.handleChange.bind(_this2);
         _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
-        _this2.generateColorFields = _this2.generateColorFields.bind(_this2);
+        _this2.generateBarFields = _this2.generateBarFields.bind(_this2);
         return _this2;
     }
 
@@ -105,39 +107,48 @@ var BarGraphForm = function (_React$Component2) {
             var id = target.id;
 
             if (target.type === "color") {
-                if (typeof this.state.barColors_[id] === "undefined") {
-                    console.log("pushed new value");
-                    this.state.barColors_[id] = value;
-                    this.setState({ barColors_: this.state.barColors_ });
-                } else {
-                    var newValue = this.state.barColors_[id] = value;
-                    this.state.barColors_.splice(id, newValue);
+                var _id = target.id.slice(-1);
+                if (_typeof(this.state.barColors_[_id])) {
+                    var newValue = this.state.barColors_[_id] = value;
+                    this.state.barColors_.splice(_id, newValue);
                     this.setState({ barColors_: this.state.barColors_ });
                     console.log("changed old value");
+                }
+            }
+            if (target.type === "text") {
+                var _id2 = target.id.slice(-1);
+                if (_typeof(this.state.barNames[_id2])) {
+                    var _newValue = this.state.barNames[_id2] = value;
+                    this.state.barNames.splice(_id2, _newValue);
+                    this.setState({ barNames: this.state.barNames });
                 }
             } else {
                 this.setState(_defineProperty({}, name, value));
             }
-            console.log(_defineProperty({}, target.id, value));
         }
     }, {
-        key: "generateColorFields",
-        value: function generateColorFields(event) {
+        key: "generateBarFields",
+        value: function generateBarFields(event) {
             this.setState({ numberOfBars: event.target.value });
-            var numColors = [];
+            var numBars = [];
             var input = event.target.value;
             for (var i = 1; i <= input; i++) {
-                numColors.push(i);
+                numBars.push(i);
                 this.state.barColors_[i - 1] = "#000000";
+                this.state.barNames[i - 1] = "barNames_" + (i - 1).toString();
                 this.setState({ barColors_: this.state.barColors_ });
+                this.setState({ barNames: this.state.barNames });
             }
             var colorsContainer = document.querySelector("#colors");
-            ReactDOM.render(React.createElement(MapColorFields, { numColors: numColors, onChange: this.handleChange, name: "barColors_" }), colorsContainer);
+            var namesContainer = document.querySelector("#bar-names");
+            ReactDOM.render(React.createElement(MapNameInputs, { numBars: numBars, onChange: this.handleChange, name: "barNames_" }), namesContainer);
+            ReactDOM.render(React.createElement(MapColorFields, { numBars: numBars, onChange: this.handleChange, name: "barColors_" }), colorsContainer);
         }
     }, {
         key: "handleSubmit",
         value: function handleSubmit(event) {
-            alert("place holder for do stuff to canvas");
+            var stateArray = Object.values(this.state);
+            alert(stateArray);
             event.preventDefault();
         }
     }, {
@@ -169,7 +180,7 @@ var BarGraphForm = function (_React$Component2) {
                         { "for": "number-of-bars" },
                         " Number of Bars:\xA0"
                     ),
-                    React.createElement("input", { type: "number", id: "number-of-bars", name: "number-of-bars", min: "1", value: this.state.numberOfBars, onChange: this.generateColorFields })
+                    React.createElement("input", { type: "number", id: "number-of-bars", name: "number-of-bars", min: "1", value: this.state.numberOfBars, onChange: this.generateBarFields })
                 ),
                 React.createElement(
                     "div",
@@ -177,9 +188,29 @@ var BarGraphForm = function (_React$Component2) {
                     React.createElement(
                         "label",
                         { "for": "colors" },
-                        " Colors:  "
+                        " Colors:\xA0"
                     ),
                     React.createElement("div", { id: "colors" })
+                ),
+                React.createElement(
+                    "div",
+                    { className: "category" },
+                    React.createElement(
+                        "label",
+                        { "for": "bar-names" },
+                        " Bar Names:\xA0"
+                    ),
+                    React.createElement("div", { id: "bar-names" })
+                ),
+                React.createElement(
+                    "div",
+                    { "class": "clearfix" },
+                    React.createElement("input", { type: "submit", id: "submit", value: "Apply", onSubmit: this.handleSubmit }),
+                    React.createElement(
+                        "button",
+                        { type: "button", id: "save-to-pdf" },
+                        "Save to PDF"
+                    )
                 )
             );
         }
@@ -212,16 +243,25 @@ function ColorInput(props) {
 }
 
 function MapColorFields(props) {
-    var numColors = props.numColors;
+    var numColors = props.numBars;
 
     console.log(numColors);
     return numColors.map(function (number, index) {
-        return React.createElement(ColorInput, { name: props.name + index.toString(), id: index.toString(), key: props.name + index.toString(), defaultValue: "#000000", onChange: props.onChange });
+        return React.createElement(ColorInput, { name: props.name + index.toString(), id: props.name + index.toString(), key: props.name + index.toString(), defaultValue: "#000000", onChange: props.onChange });
     });
 }
 
-function LabelInput(props) {
-    return React.createElement("input", { type: "text", name: "LabelInput" });
+function NameInput(props) {
+    return React.createElement("input", { type: "text", name: props.value, value: props.value, id: props.id, onChange: props.onChange });
+}
+
+function MapNameInputs(props) {
+    var numInputs = props.numBars;
+
+    console.log(numInputs);
+    return numInputs.map(function (number, index) {
+        return React.createElement(NameInput, { name: props.name + index.toString(), id: props.name + index.toString(), key: props.name + index.toString(), defaultValue: props.name + index.toString(), onChange: props.onChange });
+    });
 }
 
 var domContainer = document.querySelector("#graph-select");

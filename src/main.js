@@ -53,7 +53,7 @@ class BarGraphForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.generateColorFields = this.generateColorFields.bind(this);
+        this.generateBarFields = this.generateBarFields.bind(this);
     }
 
     handleChange(event) {
@@ -63,37 +63,48 @@ class BarGraphForm extends React.Component {
         const id = target.id;
 
         if (target.type === "color") {
-            if (typeof this.state.barColors_[id] === "undefined") {
-                console.log("pushed new value");
-                this.state.barColors_[id] = value;
-                this.setState({ barColors_: this.state.barColors_ });
-            } else {
+            let id = target.id.slice(-1);
+            if (typeof this.state.barColors_[id]) {
                 let newValue = (this.state.barColors_[id] = value);
                 this.state.barColors_.splice(id, newValue);
                 this.setState({ barColors_: this.state.barColors_ });
                 console.log("changed old value");
             }
-        } else {
+        }
+        if (target.type === "text") {
+            let id = target.id.slice(-1);
+            if (typeof this.state.barNames[id]) {
+                let newValue = (this.state.barNames[id] = value);
+                this.state.barNames.splice(id, newValue);
+                this.setState({ barNames: this.state.barNames });
+            }
+        }
+        else {
             this.setState({ [name]: value });
         }
-        console.log({ [target.id]: value });
     }
 
-    generateColorFields(event) {
+    generateBarFields(event) {
         this.setState({ numberOfBars: event.target.value });
-        const numColors = [];
+        const numBars = [];
         const input = event.target.value;
         for (let i = 1; i <= input; i++) {
-            numColors.push(i);
-            this.state.barColors_[i-1] = "#000000";
+            numBars.push(i);
+            this.state.barColors_[i - 1] = "#000000";
+            this.state.barNames[i - 1] = ("barNames_" + (i - 1).toString());
             this.setState({ barColors_: this.state.barColors_ });
+            this.setState({ barNames: this.state.barNames });
         }
         const colorsContainer = document.querySelector("#colors");
-        ReactDOM.render(<MapColorFields numColors={numColors} onChange={this.handleChange} name="barColors_" />, colorsContainer);
+        const namesContainer = document.querySelector("#bar-names");
+        ReactDOM.render(<MapNameInputs numBars={numBars} onChange={this.handleChange} name="barNames_" />, namesContainer);
+        ReactDOM.render(<MapColorFields numBars={numBars} onChange={this.handleChange} name="barColors_" />, colorsContainer);
     }
 
+
     handleSubmit(event) {
-        alert("place holder for do stuff to canvas");
+        const stateArray = Object.values(this.state);
+        alert(stateArray);
         event.preventDefault();
     }
 
@@ -107,11 +118,19 @@ class BarGraphForm extends React.Component {
                 <h4 className="category-title">Bar settings</h4>
                 <div className="category">
                     <label for="number-of-bars"> Number of Bars:&nbsp;</label>
-                    <input type="number" id="number-of-bars" name="number-of-bars" min="1" value={this.state.numberOfBars} onChange={this.generateColorFields} />
+                    <input type="number" id="number-of-bars" name="number-of-bars" min="1" value={this.state.numberOfBars} onChange={this.generateBarFields} />
                 </div>
                 <div className="category">
-                    <label for="colors"> Colors:  </label>
+                    <label for="colors"> Colors:&nbsp;</label>
                     <div id="colors"></div>
+                </div>
+                <div className="category">
+                    <label for="bar-names"> Bar Names:&nbsp;</label>
+                    <div id="bar-names"></div>
+                </div>
+                <div class="clearfix">
+                    <input type="submit" id="submit" value="Apply" onSubmit={this.handleSubmit} />
+                    <button type="button" id="save-to-pdf">Save to PDF</button>
                 </div>
             </form>
         );
@@ -134,16 +153,25 @@ function ColorInput(props) {
 }
 
 function MapColorFields(props) {
-    const numColors = props.numColors;
+    const numColors = props.numBars;
 
-    console.log(numColors)
+    console.log(numColors);
     return numColors.map((number, index) =>
-        <ColorInput name={props.name + index.toString()} id={index.toString()} key={props.name + index.toString()} defaultValue={"#000000"} onChange={props.onChange} />
+        <ColorInput name={props.name + index.toString()} id={props.name + index.toString()} key={props.name + index.toString()} defaultValue={"#000000"} onChange={props.onChange} />
     );
 }
 
-function LabelInput(props) {
-    return <input type="text" name="LabelInput" />
+function NameInput(props) {
+    return <input type="text" name={props.value} value={props.value} id={props.id} onChange={props.onChange} />
+}
+
+function MapNameInputs(props) {
+    const numInputs = props.numBars;
+
+    console.log(numInputs);
+    return numInputs.map((number, index) =>
+        <NameInput name={props.name + index.toString()} id={props.name + index.toString()} key={props.name + index.toString()} defaultValue={props.name + index.toString()} onChange={props.onChange} />
+    );
 }
 
 
