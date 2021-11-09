@@ -117,7 +117,8 @@ var BarGraphForm = function (_React$Component2) {
             } else if (id.includes("barNames")) {
                 var _id2 = target.id.slice(-1);
                 if (_typeof(this.state.barNames[_id2])) {
-                    var _newValue = this.state.barNames[_id2] = value;
+                    var input = target.value;
+                    var _newValue = this.state.barNames[_id2] = input.toString();
                     this.state.barNames.splice(_id2, _newValue);
                     this.setState({ barNames: this.state.barNames });
                 }
@@ -125,8 +126,8 @@ var BarGraphForm = function (_React$Component2) {
                 var _id3 = target.id.slice(-1);
                 console.log("id: " + _id3);
                 if (_typeof(this.state.barValues[_id3])) {
-                    console.log(value);
-                    var _newValue2 = this.state.barValues[_id3] = value;
+                    var _input = target.value;
+                    var _newValue2 = this.state.barValues[_id3] = _input; //values show as undefined in state. maybe use text input with filters instead as a work around
                     this.state.barValues.splice(_id3, _newValue2);
                     this.setState({ barValues: this.state.barValues });
                 }
@@ -147,7 +148,7 @@ var BarGraphForm = function (_React$Component2) {
                 numBars.push(i);
                 this.state.barColors_[i - 1] = "#000000";
                 this.state.barNames[i - 1] = "barNames_" + (i - 1).toString();
-                this.state.barValues[i - 1] = "0";
+                this.state.barValues[i - 1] = 0;
                 this.setState({ barColors_: this.state.barColors_ });
                 this.setState({ barNames: this.state.barNames });
                 this.setState({ barValues: this.state.barValues });
@@ -159,7 +160,7 @@ var BarGraphForm = function (_React$Component2) {
             for (var _i = 0; _i <= input; _i++) {
                 ReactDOM.render(React.createElement(ColorInput, { name: "barColors_" + _i.toString(), id: "barColors_" + _i.toString(), key: "barColors_" + _i.toString(), defaultValue: "#000000", onChange: this.handleChange }), document.querySelector("#colors_" + _i.toString()));
                 ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + _i.toString(), id: "barNames_" + _i.toString(), key: "barNames_" + _i.toString(), placeholder: "barNames_" + _i.toString(), onChange: this.handleChange }), document.querySelector("#bar-names_" + _i.toString()));
-                ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + _i.toString(), id: "barValues_" + _i.toString(), key: "barValues_" + _i.toString(), placeholder: 0, onChange: this.handleChange, defaultValue: 0 }), document.querySelector("#bar-values_" + _i.toString()));
+                ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + _i.toString(), id: "barValues_" + _i.toString(), key: "barValues_" + _i.toString(), placeholder: 0, onChange: this.handleChange }), document.querySelector("#bar-values_" + _i.toString()));
                 // ReactDOM.render(<MapNumberInputs numBars={numBars} onChange={this.handleChange} name="barValues_" />, document.querySelector("#bar-values_" + (i - 1).toString()));
                 // ReactDOM.render(<MapNameInputs numBars={numBars} onChange={this.handleChange} name="barNames_" />, document.querySelector("#bar-names_" + (i - 1).toString()));
                 // ReactDOM.render(<MapColorFields numBars={numBars} onChange={this.handleChange} name="barColors_" />, document.querySelector("#colors_" + (i - 1).toString()));
@@ -241,7 +242,7 @@ function GraphOrientation(props) {
 }
 
 function ColorInput(props) {
-    return React.createElement("input", { type: "color", name: props.name, value: props.value, id: props.id, onChange: props.onChange });
+    return React.createElement("input", { type: "color", name: props.name, id: props.id, onChange: props.onChange });
 }
 
 function MapColorFields(props) {
@@ -265,7 +266,7 @@ function MapNameInputs(props) {
 }
 
 function NumberInput(props) {
-    return React.createElement("input", { type: "number", name: props.name, value: props.value, id: props.id, placeholder: props.placeholder, onChange: props.onChange });
+    return React.createElement("input", { type: "number", name: props.name, id: props.id, placeholder: props.placeholder, onChange: props.onChange });
 }
 
 function MapNumberInputs(props) {

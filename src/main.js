@@ -73,7 +73,8 @@ class BarGraphForm extends React.Component {
         else if (id.includes("barNames")) {
             let id = target.id.slice(-1);
             if (typeof this.state.barNames[id]) {
-                let newValue = (this.state.barNames[id] = value);
+                let input = target.value;
+                let newValue = (this.state.barNames[id] = input.toString());
                 this.state.barNames.splice(id, newValue);
                 this.setState({ barNames: this.state.barNames });
             }
@@ -82,8 +83,8 @@ class BarGraphForm extends React.Component {
             let id = target.id.slice(-1);
             console.log("id: " + id);
             if (typeof this.state.barValues[id]) {
-                console.log(value);
-                let newValue = (this.state.barValues[id] = value);
+                let input = target.value;
+                let newValue = (this.state.barValues[id] = input); //values show as undefined in state. maybe use text input with filters instead as a work around
                 this.state.barValues.splice(id, newValue);
                 this.setState({ barValues: this.state.barValues });
             }
@@ -104,7 +105,7 @@ class BarGraphForm extends React.Component {
             numBars.push(i);
             this.state.barColors_[i - 1] = "#000000";
             this.state.barNames[i - 1] = ("barNames_" + (i - 1).toString());
-            this.state.barValues[i - 1] = "0";
+            this.state.barValues[i - 1] = 0;
             this.setState({ barColors_: this.state.barColors_ });
             this.setState({ barNames: this.state.barNames });
             this.setState({ barValues: this.state.barValues });
@@ -116,7 +117,7 @@ class BarGraphForm extends React.Component {
         for (let i = 0; i <= input; i++) {
             ReactDOM.render(<ColorInput name={"barColors_" + i.toString()} id={"barColors_" + i.toString()} key={"barColors_" + i.toString()} defaultValue={"#000000"} onChange={this.handleChange} />, document.querySelector("#colors_" + (i).toString()));
             ReactDOM.render(<NameInput name={"barNames_" + i.toString()} id={"barNames_" + i.toString()} key={"barNames_" + i.toString()} placeholder={"barNames_" + i.toString()} onChange={this.handleChange} />, document.querySelector("#bar-names_" + (i).toString()));
-            ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange} defaultValue={0}/>, document.querySelector("#bar-values_" + (i).toString()));
+            ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange}/>, document.querySelector("#bar-values_" + (i).toString()));
             // ReactDOM.render(<MapNumberInputs numBars={numBars} onChange={this.handleChange} name="barValues_" />, document.querySelector("#bar-values_" + (i - 1).toString()));
             // ReactDOM.render(<MapNameInputs numBars={numBars} onChange={this.handleChange} name="barNames_" />, document.querySelector("#bar-names_" + (i - 1).toString()));
             // ReactDOM.render(<MapColorFields numBars={numBars} onChange={this.handleChange} name="barColors_" />, document.querySelector("#colors_" + (i - 1).toString()));
@@ -176,7 +177,7 @@ function GraphOrientation(props) {
 }
 
 function ColorInput(props) {
-    return <input type="color" name={props.name} value={props.value} id={props.id} onChange={props.onChange} />
+    return <input type="color" name={props.name} id={props.id} onChange={props.onChange} />
 }
 
 function MapColorFields(props) {
@@ -200,7 +201,7 @@ function MapNameInputs(props) {
 }
 
 function NumberInput(props) {
-    return <input type="number" name={props.name} value={props.value} id={props.id} placeholder={props.placeholder} onChange={props.onChange} />
+    return <input type="number" name={props.name} id={props.id} placeholder={props.placeholder} onChange={props.onChange} />
 }
 
 function MapNumberInputs(props) {
