@@ -86,7 +86,6 @@ var BarGraphForm = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (BarGraphForm.__proto__ || Object.getPrototypeOf(BarGraphForm)).call(this, props));
 
         _this2.state = {
-            firstUpdate: true,
             orientation: "vertical",
             numberOfBars: "",
             barNames: [],
@@ -107,7 +106,7 @@ var BarGraphForm = function (_React$Component2) {
             var value = target.value;
             var name = target.name;
             var id = target.id;
-            var t_id = target.id.slice(-1);
+            var t_id = getID(id);
 
             switch (true) {
                 case id.includes("barColors"):
@@ -280,6 +279,10 @@ function MapGroupInputs(props) {
     return numInputs.map(function (number, index) {
         return React.createElement(GroupInputs, { className: "category", id: "barGroup_" + index.toString(), key: "barGroup_" + index.toString(), nameId: "bar-names_" + index.toString(), colorId: "colors_" + index.toString(), numId: "bar-values_" + index.toString() });
     });
+}
+
+function getID(id) {
+    return id.split("_")[1];
 }
 
 var domContainer = document.querySelector("#graph-select");

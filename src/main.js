@@ -44,7 +44,6 @@ class BarGraphForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstUpdate: true,
             orientation: "vertical",
             numberOfBars: "",
             barNames: [],
@@ -62,7 +61,7 @@ class BarGraphForm extends React.Component {
         const value = target.value;
         const name = target.name;
         const id = target.id;
-        const t_id = target.id.slice(-1);
+        const t_id = getID(id);
 
         switch (true) {
             case id.includes("barColors"):
@@ -116,7 +115,7 @@ class BarGraphForm extends React.Component {
 
         const groupsContainer = document.querySelector("#group-container");
         const settingsElements = document.querySelectorAll(".settings-element");
-        
+
         //node clean up
         ReactDOM.unmountComponentAtNode(groupsContainer);
         settingsElements.forEach(function (item) {
@@ -212,6 +211,10 @@ function MapGroupInputs(props) {
     return numInputs.map((number, index) =>
         <GroupInputs className={"category"} id={"barGroup_" + index.toString()} key={"barGroup_" + index.toString()} nameId={"bar-names_" + index.toString()} colorId={"colors_" + index.toString()} numId={"bar-values_" + index.toString()} />
     );
+}
+
+function getID(id) {
+    return id.split("_")[1];
 }
 
 
