@@ -44,6 +44,7 @@ class BarGraphForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            firstUpdate: true,
             orientation: "vertical",
             numberOfBars: "",
             barNames: [],
@@ -114,12 +115,21 @@ class BarGraphForm extends React.Component {
         }
 
         const groupsContainer = document.querySelector("#group-container");
+        const settingsElements = document.querySelectorAll(".settings-element");
+        
+        //node clean up
+        ReactDOM.unmountComponentAtNode(groupsContainer);
+        settingsElements.forEach(function (item) {
+            ReactDOM.unmountComponentAtNode(item);
+        })
+        
+        //render new elements
         ReactDOM.render(<MapGroupInputs numBars={numBars} name="group-container_" />, groupsContainer);
-        numBars.forEach(function(item, i){
+        for (let i = 0; i <= input; i++) {
             ReactDOM.render(<ColorInput name={"barColors_" + i.toString()} id={"barColors_" + i.toString()} key={"barColors_" + i.toString()} defaultValue={"#000000"} onChange={this.handleChange} />, document.querySelector("#colors_" + (i).toString()));
             ReactDOM.render(<NameInput name={"barNames_" + i.toString()} id={"barNames_" + i.toString()} key={"barNames_" + i.toString()} placeholder={"barNames_" + i.toString()} onChange={this.handleChange} />, document.querySelector("#bar-names_" + (i).toString()));
             ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange} />, document.querySelector("#bar-values_" + (i).toString()));
-        })
+        }
     }
 
 
@@ -190,8 +200,8 @@ function GroupInputs(props) {
     return (
         <div className={props.id} id={props.id} name={props.id}>
             <div className="settings-element" id={props.nameId}></div>
-            <div className="settings-element" id={props.colorId}></div>
             <div className="settings-element" id={props.numId}></div>
+            <div className="settings-element" id={props.colorId}></div>
         </div>
     );
 }

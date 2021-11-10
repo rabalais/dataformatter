@@ -118,6 +118,8 @@ button:hover, input[type=submit]:hover {
 div.category {
     border-top: solid;
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     height: auto;
     border-width: 1px;
     padding: 10px;
@@ -130,4 +132,5 @@ div[class*="barGroup"] {
 
 .settings-element {
     width: 100%;
+    justify-content: center;
 }

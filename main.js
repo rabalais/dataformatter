@@ -86,6 +86,7 @@ var BarGraphForm = function (_React$Component2) {
         var _this2 = _possibleConstructorReturn(this, (BarGraphForm.__proto__ || Object.getPrototypeOf(BarGraphForm)).call(this, props));
 
         _this2.state = {
+            firstUpdate: true,
             orientation: "vertical",
             numberOfBars: "",
             barNames: [],
@@ -160,12 +161,21 @@ var BarGraphForm = function (_React$Component2) {
             }
 
             var groupsContainer = document.querySelector("#group-container");
-            ReactDOM.render(React.createElement(MapGroupInputs, { numBars: numBars, name: "group-container_" }), groupsContainer);
-            numBars.forEach(function (item, i) {
-                ReactDOM.render(React.createElement(ColorInput, { name: "barColors_" + i.toString(), id: "barColors_" + i.toString(), key: "barColors_" + i.toString(), defaultValue: "#000000", onChange: this.handleChange }), document.querySelector("#colors_" + i.toString()));
-                ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + i.toString(), id: "barNames_" + i.toString(), key: "barNames_" + i.toString(), placeholder: "barNames_" + i.toString(), onChange: this.handleChange }), document.querySelector("#bar-names_" + i.toString()));
-                ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + i.toString(), id: "barValues_" + i.toString(), key: "barValues_" + i.toString(), placeholder: 0, onChange: this.handleChange }), document.querySelector("#bar-values_" + i.toString()));
+            var settingsElements = document.querySelectorAll(".settings-element");
+
+            //node clean up
+            ReactDOM.unmountComponentAtNode(groupsContainer);
+            settingsElements.forEach(function (item) {
+                ReactDOM.unmountComponentAtNode(item);
             });
+
+            //render new elements
+            ReactDOM.render(React.createElement(MapGroupInputs, { numBars: numBars, name: "group-container_" }), groupsContainer);
+            for (var _i = 0; _i <= input; _i++) {
+                ReactDOM.render(React.createElement(ColorInput, { name: "barColors_" + _i.toString(), id: "barColors_" + _i.toString(), key: "barColors_" + _i.toString(), defaultValue: "#000000", onChange: this.handleChange }), document.querySelector("#colors_" + _i.toString()));
+                ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + _i.toString(), id: "barNames_" + _i.toString(), key: "barNames_" + _i.toString(), placeholder: "barNames_" + _i.toString(), onChange: this.handleChange }), document.querySelector("#bar-names_" + _i.toString()));
+                ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + _i.toString(), id: "barValues_" + _i.toString(), key: "barValues_" + _i.toString(), placeholder: 0, onChange: this.handleChange }), document.querySelector("#bar-values_" + _i.toString()));
+            }
         }
     }, {
         key: "handleSubmit",
@@ -259,8 +269,8 @@ function GroupInputs(props) {
         "div",
         { className: props.id, id: props.id, name: props.id },
         React.createElement("div", { className: "settings-element", id: props.nameId }),
-        React.createElement("div", { className: "settings-element", id: props.colorId }),
-        React.createElement("div", { className: "settings-element", id: props.numId })
+        React.createElement("div", { className: "settings-element", id: props.numId }),
+        React.createElement("div", { className: "settings-element", id: props.colorId })
     );
 }
 
