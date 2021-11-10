@@ -1,7 +1,7 @@
 html {
     height: 100%;
     width: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -86,7 +86,7 @@ header div {
     border-radius: 10px;
 }
 
-#settings-form-react {
+.settings-form {
     padding: 20px;
 }
 
@@ -126,11 +126,116 @@ div.category {
     border-color: rgb(187, 187, 187);
 }
 
-div[class*="barGroup"] {
-    margin: 0 4px 0 4px;
+.bar-group {
+    padding: 10px 15px 10px 10px;
+    background-color: rgb(235, 235, 235);
+    border-radius: 10px;
+}
+
+div[id*="label_"] {
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: rgb(187, 187, 187);
+    padding-bottom: 3px;
+    margin-bottom: 5px;
 }
 
 .settings-element {
     width: 100%;
     justify-content: center;
+    margin: 5px 0 5px 0;
+    border: none;
+    text-align: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex: 50%;
+    position: relative;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 10px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 35px;
+    width: 100%;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.radio-label {
+    z-index: 10;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.custom-select {
+    border: none;
+    border-radius: 5px;
+    background-color: #eee;
+    line-height: 1.5em;
+    width: 20%;
+    text-align: center;
+}
+
+.custom-select:hover {
+    border: solid;
+    border-color: #2196F3;
+    border-width: 2px;
+}
+
+.custom-number-input {
+    text-align: center;
+    background-color: #eee;
+    border: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

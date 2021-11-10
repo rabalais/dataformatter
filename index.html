@@ -6,6 +6,9 @@
     <title>Graph Builder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -20,9 +23,12 @@
         </header>
         <div class="flex-container">
             <div class="flex-item">
-                <div class="settings-container" id="settings-container">
-                    <div id="graph-select"></div>
-                    <div id="settings-form-react"></div>
+                <div id="settings-container">
+                    <div class="settings-form">
+                        <h4 class="category-title">Select a graph to get started</h4>
+                        <div class="category" id="graph-select"></div>
+                    </div>
+                    <div class="settings-form" id="settings-form-react"></div>
                 </div>
             </div>
             <div class="flex-item">

@@ -49,12 +49,7 @@ var GraphType = function (_React$Component) {
         value: function render() {
             return React.createElement(
                 "form",
-                { id: "settings-form" },
-                React.createElement(
-                    "h4",
-                    null,
-                    "Select a graph to get started"
-                ),
+                { className: "flex-item" },
                 React.createElement(
                     "label",
                     { "for": "graph-type" },
@@ -62,7 +57,7 @@ var GraphType = function (_React$Component) {
                 ),
                 React.createElement(
                     "select",
-                    { value: this.state.value, onChange: this.handleChange },
+                    { className: "custom-select", value: this.state.value, onChange: this.handleChange },
                     React.createElement("option", { disabled: true, hidden: true, value: "" }),
                     React.createElement(
                         "option",
@@ -149,6 +144,10 @@ var BarGraphForm = function (_React$Component2) {
             var numBars = [];
             var input = event.target.value;
 
+            //reset states
+            this.setState({ barColors_: [] });
+            this.setState({ barNames: [] });
+            this.setState({ barValues: [] });
             for (var i = 1; i <= input; i++) {
                 numBars.push(i);
                 this.state.barColors_[i - 1] = "#000000";
@@ -171,8 +170,14 @@ var BarGraphForm = function (_React$Component2) {
             //render new elements
             ReactDOM.render(React.createElement(MapGroupInputs, { numBars: numBars, name: "group-container_" }), groupsContainer);
             for (var _i = 0; _i <= input; _i++) {
+                ReactDOM.render(React.createElement(
+                    "label",
+                    null,
+                    "Bar ",
+                    (_i + 1).toString()
+                ), document.querySelector("#label_" + _i.toString()));
                 ReactDOM.render(React.createElement(ColorInput, { name: "barColors_" + _i.toString(), id: "barColors_" + _i.toString(), key: "barColors_" + _i.toString(), defaultValue: "#000000", onChange: this.handleChange }), document.querySelector("#colors_" + _i.toString()));
-                ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + _i.toString(), id: "barNames_" + _i.toString(), key: "barNames_" + _i.toString(), placeholder: "barNames_" + _i.toString(), onChange: this.handleChange }), document.querySelector("#bar-names_" + _i.toString()));
+                ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + _i.toString(), id: "barNames_" + _i.toString(), key: "barNames_" + _i.toString(), placeholder: "Name", onChange: this.handleChange }), document.querySelector("#bar-names_" + _i.toString()));
                 ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + _i.toString(), id: "barValues_" + _i.toString(), key: "barValues_" + _i.toString(), placeholder: 0, onChange: this.handleChange }), document.querySelector("#bar-values_" + _i.toString()));
             }
         }
@@ -190,31 +195,47 @@ var BarGraphForm = function (_React$Component2) {
                 "form",
                 { onSubmit: this.handleSubmit },
                 React.createElement(
-                    "h4",
-                    { className: "category-title" },
-                    "Graph orientation"
-                ),
-                React.createElement(
                     "div",
-                    { className: "category" },
-                    React.createElement(GraphOrientation, { onChange: this.handleChange })
-                ),
-                React.createElement(
-                    "h4",
-                    { className: "category-title" },
-                    "Bar settings"
-                ),
-                React.createElement(
-                    "div",
-                    { className: "category" },
+                    { className: "flex-container" },
                     React.createElement(
-                        "label",
-                        { "for": "number-of-bars" },
-                        " Number of Bars:\xA0"
+                        "div",
+                        { className: "flex-item" },
+                        React.createElement(
+                            "h4",
+                            { className: "category-title" },
+                            "Orientation"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "category" },
+                            React.createElement(GraphOrientation, { onChange: this.handleChange })
+                        )
                     ),
-                    React.createElement("input", { type: "number", id: "number-of-bars", name: "number-of-bars", min: "1", placeholder: "0", value: this.state.numberOfBars, onChange: this.generateBarFields })
+                    React.createElement(
+                        "div",
+                        { className: "flex-item" },
+                        React.createElement(
+                            "h4",
+                            { className: "category-title" },
+                            "Settings"
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "category" },
+                            React.createElement(
+                                "div",
+                                null,
+                                React.createElement(
+                                    "label",
+                                    { "for": "number-of-bars" },
+                                    " Number of Bars:\xA0"
+                                ),
+                                React.createElement("input", { type: "number", className: "custom-number-input", id: "number-of-bars", name: "number-of-bars", min: "1", placeholder: "0", value: this.state.numberOfBars, onChange: this.generateBarFields })
+                            )
+                        )
+                    )
                 ),
-                React.createElement("div", { className: "category", id: "group-container" }),
+                React.createElement("div", { className: "category justify-center", id: "group-container" }),
                 React.createElement(
                     "div",
                     { className: "clearfix" },
@@ -235,19 +256,29 @@ var BarGraphForm = function (_React$Component2) {
 function GraphOrientation(props) {
     return React.createElement(
         "div",
-        { onChange: props.onChange },
+        { className: "flex-container", onChange: props.onChange },
         React.createElement(
-            "label",
-            { "for": "vertical" },
-            " Vertical:\xA0"
+            "div",
+            { className: "container" },
+            React.createElement(
+                "label",
+                { className: "radio-label", "for": "vertical" },
+                "Vertical"
+            ),
+            React.createElement("input", { type: "radio", id: "vertical", name: "orientation", required: true, defaultChecked: true, value: "vertical" }),
+            React.createElement("span", { className: "checkmark" })
         ),
-        React.createElement("input", { type: "radio", id: "vertical", name: "orientation", required: true, defaultChecked: true, value: "vertical" }),
         React.createElement(
-            "label",
-            { "for": "horizontal" },
-            " Horizontal:\xA0"
-        ),
-        React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", required: true, value: "horizontal" })
+            "div",
+            { className: "container" },
+            React.createElement(
+                "label",
+                { className: "radio-label", "for": "horizontal" },
+                "Horizontal"
+            ),
+            React.createElement("input", { type: "radio", id: "horizontal", name: "orientation", required: true, value: "horizontal" }),
+            React.createElement("span", { className: "checkmark" })
+        )
     );
 }
 
@@ -266,7 +297,8 @@ function NumberInput(props) {
 function GroupInputs(props) {
     return React.createElement(
         "div",
-        { className: props.id, id: props.id, name: props.id },
+        { className: props.className, id: props.id, name: props.name },
+        React.createElement("div", { className: "settings-element", id: props.labelId }),
         React.createElement("div", { className: "settings-element", id: props.nameId }),
         React.createElement("div", { className: "settings-element", id: props.numId }),
         React.createElement("div", { className: "settings-element", id: props.colorId })
@@ -277,7 +309,7 @@ function MapGroupInputs(props) {
     var numInputs = props.numBars;
 
     return numInputs.map(function (number, index) {
-        return React.createElement(GroupInputs, { className: "category", id: "barGroup_" + index.toString(), key: "barGroup_" + index.toString(), nameId: "bar-names_" + index.toString(), colorId: "colors_" + index.toString(), numId: "bar-values_" + index.toString() });
+        return React.createElement(GroupInputs, { className: "bar-group", id: "barGroup_" + index.toString(), key: "barGroup_" + index.toString(), labelId: "label_" + index.toString(), nameId: "bar-names_" + index.toString(), colorId: "colors_" + index.toString(), numId: "bar-values_" + index.toString() });
     });
 }
 

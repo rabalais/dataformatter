@@ -28,10 +28,9 @@ class GraphType extends React.Component {
 
     render() {
         return (
-            <form id="settings-form">
-                <h4>Select a graph to get started</h4>
+            <form className="flex-item">
                 <label for="graph-type">Graph Type: </label>
-                <select value={this.state.value} onChange={this.handleChange}>
+                <select className="custom-select" value={this.state.value} onChange={this.handleChange}>
                     <option disabled hidden value=""></option>
                     <option value="bargraph">Bar Graph</option>
                 </select>
@@ -103,6 +102,10 @@ class BarGraphForm extends React.Component {
         const numBars = [];
         const input = event.target.value;
 
+        //reset states
+        this.setState({ barColors_: [] });
+        this.setState({ barNames: [] });
+        this.setState({ barValues: [] });
         for (let i = 1; i <= input; i++) {
             numBars.push(i);
             this.state.barColors_[i - 1] = "#000000";
@@ -121,12 +124,13 @@ class BarGraphForm extends React.Component {
         settingsElements.forEach(function (item) {
             ReactDOM.unmountComponentAtNode(item);
         })
-        
+
         //render new elements
         ReactDOM.render(<MapGroupInputs numBars={numBars} name="group-container_" />, groupsContainer);
         for (let i = 0; i <= input; i++) {
+            ReactDOM.render(<label>Bar {(i + 1).toString()}</label>, document.querySelector("#label_" + (i).toString()));
             ReactDOM.render(<ColorInput name={"barColors_" + i.toString()} id={"barColors_" + i.toString()} key={"barColors_" + i.toString()} defaultValue={"#000000"} onChange={this.handleChange} />, document.querySelector("#colors_" + (i).toString()));
-            ReactDOM.render(<NameInput name={"barNames_" + i.toString()} id={"barNames_" + i.toString()} key={"barNames_" + i.toString()} placeholder={"barNames_" + i.toString()} onChange={this.handleChange} />, document.querySelector("#bar-names_" + (i).toString()));
+            ReactDOM.render(<NameInput name={"barNames_" + i.toString()} id={"barNames_" + i.toString()} key={"barNames_" + i.toString()} placeholder={"Name"} onChange={this.handleChange} />, document.querySelector("#bar-names_" + (i).toString()));
             ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange} />, document.querySelector("#bar-values_" + (i).toString()));
         }
     }
@@ -141,28 +145,24 @@ class BarGraphForm extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <h4 className="category-title">Graph orientation</h4>
-                <div className="category">
-                    <GraphOrientation onChange={this.handleChange} />
+                <div className="flex-container">
+                    <div className="flex-item">
+                        <h4 className="category-title">Orientation</h4>
+                        <div className="category">
+                            <GraphOrientation onChange={this.handleChange} />
+                        </div>
+                    </div>
+                    <div className="flex-item">
+                        <h4 className="category-title">Settings</h4>
+                        <div className="category">
+                            <div>
+                                <label for="number-of-bars"> Number of Bars:&nbsp;</label>
+                                <input type="number" className="custom-number-input" id="number-of-bars" name="number-of-bars" min="1" placeholder="0" value={this.state.numberOfBars} onChange={this.generateBarFields} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h4 className="category-title">Bar settings</h4>
-                <div className="category">
-                    <label for="number-of-bars"> Number of Bars:&nbsp;</label>
-                    <input type="number" id="number-of-bars" name="number-of-bars" min="1" placeholder="0" value={this.state.numberOfBars} onChange={this.generateBarFields} />
-                </div>
-                <div className="category" id="group-container"></div>
-                {/* <div className="category">
-                    <label for="colors"> Colors:&nbsp;</label>
-                    <div id="colors"></div>
-                </div>
-                <div className="category">
-                    <label for="bar-names"> Bar Names:&nbsp;</label>
-                    <div id="bar-names"></div>
-                </div>
-                <div className="category">
-                    <label for="bar-values"> Bar Values:&nbsp;</label>
-                    <div id="bar-values"></div>
-                </div> */}
+                <div className="category justify-center" id="group-container"></div>
                 <div className="clearfix">
                     <input type="submit" id="submit" value="Apply" onSubmit={this.handleSubmit} />
                     <button type="button" id="save-to-pdf">Save to PDF</button>
@@ -174,11 +174,17 @@ class BarGraphForm extends React.Component {
 
 function GraphOrientation(props) {
     return (
-        <div onChange={props.onChange}>
-            <label for="vertical"> Vertical:&nbsp;</label>
-            <input type="radio" id="vertical" name="orientation" required defaultChecked value="vertical" />
-            <label for="horizontal"> Horizontal:&nbsp;</label>
-            <input type="radio" id="horizontal" name="orientation" required value="horizontal" />
+        <div className="flex-container" onChange={props.onChange}>
+            <div className="container">
+                <label className="radio-label" for="vertical">Vertical</label>
+                <input type="radio" id="vertical" name="orientation" required defaultChecked value="vertical" />
+                <span className="checkmark"></span>
+            </div>
+            <div className="container" >
+                <label className="radio-label" for="horizontal">Horizontal</label>
+                <input type="radio" id="horizontal" name="orientation" required value="horizontal" />
+                <span className="checkmark"></span>
+            </div>
         </div>
     )
 }
@@ -197,7 +203,8 @@ function NumberInput(props) {
 
 function GroupInputs(props) {
     return (
-        <div className={props.id} id={props.id} name={props.id}>
+        <div className={props.className} id={props.id} name={props.name}>
+            <div className="settings-element" id={props.labelId}></div>
             <div className="settings-element" id={props.nameId}></div>
             <div className="settings-element" id={props.numId}></div>
             <div className="settings-element" id={props.colorId}></div>
@@ -209,7 +216,7 @@ function MapGroupInputs(props) {
     let numInputs = props.numBars;
 
     return numInputs.map((number, index) =>
-        <GroupInputs className={"category"} id={"barGroup_" + index.toString()} key={"barGroup_" + index.toString()} nameId={"bar-names_" + index.toString()} colorId={"colors_" + index.toString()} numId={"bar-values_" + index.toString()} />
+        <GroupInputs className={"bar-group"} id={"barGroup_" + index.toString()} key={"barGroup_" + index.toString()} labelId={"label_" + index.toString()} nameId={"bar-names_" + index.toString()} colorId={"colors_" + index.toString()} numId={"bar-values_" + index.toString()} />
     );
 }
 
