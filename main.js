@@ -106,36 +106,41 @@ var BarGraphForm = function (_React$Component2) {
             var value = target.value;
             var name = target.name;
             var id = target.id;
+            var t_id = target.id.slice(-1);
 
-            if (id.includes("barColors")) {
-                var _id = target.id.slice(-1);
-                if (_typeof(this.state.barColors_[_id])) {
-                    var newValue = this.state.barColors_[_id] = value;
-                    this.state.barColors_.splice(_id, newValue);
-                    this.setState({ barColors_: this.state.barColors_ });
-                }
-            } else if (id.includes("barNames")) {
-                var _id2 = target.id.slice(-1);
-                if (_typeof(this.state.barNames[_id2])) {
-                    var input = target.value;
-                    var _newValue = this.state.barNames[_id2] = input.toString();
-                    this.state.barNames.splice(_id2, _newValue);
-                    this.setState({ barNames: this.state.barNames });
-                }
-            } else if (id.includes("barValues")) {
-                var _id3 = target.id.slice(-1);
-                console.log("id: " + _id3);
-                if (_typeof(this.state.barValues[_id3])) {
-                    var _input = target.value;
-                    var _newValue2 = this.state.barValues[_id3] = _input; //values show as undefined in state. maybe use text input with filters instead as a work around
-                    this.state.barValues.splice(_id3, _newValue2);
-                    this.setState({ barValues: this.state.barValues });
-                }
-            } else {
-                console.log("else fired");
-                this.setState(_defineProperty({}, name, value));
+            switch (true) {
+                case id.includes("barColors"):
+                    console.log("barColors");
+                    if (_typeof(this.state.barColors_[t_id])) {
+                        var newValue = this.state.barColors_[t_id] = value;
+                        this.state.barColors_.splice(t_id, 1, newValue);
+                        this.setState({ barColors_: this.state.barColors_ });
+                    }
+                    break;
+                case id.includes("barNames"):
+                    console.log("barNames");
+                    if (_typeof(this.state.barNames[t_id])) {
+                        var input = target.value;
+                        var _newValue = this.state.barNames[t_id] = input;
+                        this.state.barNames.splice(t_id, 1, _newValue);
+                        this.setState({ barNames: this.state.barNames });
+                    }
+                    break;
+                case id.includes("barValues"):
+                    console.log("id: " + id);
+                    console.log("barNames");
+                    if (_typeof(this.state.barValues[t_id])) {
+                        var _input = target.value;
+                        var _newValue2 = this.state.barValues[t_id] = _input; //values show as undefined in state. maybe use text input with filters instead as a work around
+                        this.state.barValues.splice(t_id, 1, _newValue2);
+                        this.setState({ barValues: this.state.barValues });
+                        break;
+                    }
+                default:
+                    console.log("default");
+                    this.setState(_defineProperty({}, name, value));
+                    console.log(_defineProperty({}, name, value));
             }
-            console.log(_defineProperty({}, name, value));
         }
     }, {
         key: "generateBarFields",
@@ -169,7 +174,7 @@ var BarGraphForm = function (_React$Component2) {
     }, {
         key: "handleSubmit",
         value: function handleSubmit(event) {
-            var stateArray = Object.values(this.state);
+            var stateArray = Object.values(this.state.barValues.toString());
             alert(stateArray);
             event.preventDefault();
         }

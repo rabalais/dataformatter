@@ -61,36 +61,38 @@ class BarGraphForm extends React.Component {
         const value = target.value;
         const name = target.name;
         const id = target.id;
+        const t_id = target.id.slice(-1);
 
-        switch (id.includes()) {
-            case "barColors":
-                let id = target.id.slice(-1);
-                if (typeof this.state.barColors_[id]) {
-                    let newValue = (this.state.barColors_[id] = value);
-                    this.state.barColors_.splice(id, newValue);
+        switch (true) {
+            case id.includes("barColors"):
+                console.log("barColors")
+                if (typeof this.state.barColors_[t_id]) {
+                    let newValue = (this.state.barColors_[t_id] = value);
+                    this.state.barColors_.splice(t_id, 1, newValue);
                     this.setState({ barColors_: this.state.barColors_ });
                 }
                 break;
-            case "barNames":
-                let id = target.id.slice(-1);
-                if (typeof this.state.barNames[id]) {
-                    let input = (target.value).toString();
-                    let newValue = (this.state.barNames[id] = input);
-                    this.state.barNames.splice(id, 1, newValue);
+            case id.includes("barNames"):
+                console.log("barNames")
+                if (typeof this.state.barNames[t_id]) {
+                    let input = target.value;
+                    let newValue = (this.state.barNames[t_id] = input);
+                    this.state.barNames.splice(t_id, 1, newValue);
                     this.setState({ barNames: this.state.barNames });
                 }
                 break;
-            case "barValues":
-                let id = target.id.slice(-1);
+            case id.includes("barValues"):
                 console.log("id: " + id);
-                if (typeof this.state.barValues[id]) {
-                    let input = (target.value).toString();
-                    let newValue = (this.state.barValues[id] = input); //values show as undefined in state. maybe use text input with filters instead as a work around
-                    this.state.barValues.splice(id, 1, newValue);
+                console.log("barNames")
+                if (typeof this.state.barValues[t_id]) {
+                    let input = target.value;
+                    let newValue = (this.state.barValues[t_id] = input); //values show as undefined in state. maybe use text input with filters instead as a work around
+                    this.state.barValues.splice(t_id, 1, newValue);
                     this.setState({ barValues: this.state.barValues });
                     break;
                 }
             default:
+                console.log("default")
                 this.setState({ [name]: value });
                 console.log({ [name]: value });
         }
