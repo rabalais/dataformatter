@@ -212,7 +212,7 @@ div[id*="label_"] {
     border-radius: 5px;
     background-color: #eee;
     line-height: 1.5em;
-    width: 20%;
+    width: auto;
     text-align: center;
 }
 
