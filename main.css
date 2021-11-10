@@ -87,11 +87,7 @@ header div {
 }
 
 .settings-form {
-    padding: 20px;
-}
-
-#settings-form {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
 }
 
 button, input[type=submit]{

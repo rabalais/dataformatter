@@ -313,6 +313,10 @@ function MapGroupInputs(props) {
     });
 }
 
+function AxisTitle(props) {
+    return React.createElement("input", { type: "text", className: "settings-element", name: props.name, value: props.value, placeholder: props.placeholder, onChange: props.onChange });
+}
+
 function getID(id) {
     return id.split("_")[1];
 }
