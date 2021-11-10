@@ -62,38 +62,38 @@ class BarGraphForm extends React.Component {
         const name = target.name;
         const id = target.id;
 
-        if (id.includes("barColors")) {
-            let id = target.id.slice(-1);
-            if (typeof this.state.barColors_[id]) {
-                let newValue = (this.state.barColors_[id] = value);
-                this.state.barColors_.splice(id, newValue);
-                this.setState({ barColors_: this.state.barColors_ });
-            }
+        switch (id.includes()) {
+            case "barColors":
+                let id = target.id.slice(-1);
+                if (typeof this.state.barColors_[id]) {
+                    let newValue = (this.state.barColors_[id] = value);
+                    this.state.barColors_.splice(id, newValue);
+                    this.setState({ barColors_: this.state.barColors_ });
+                }
+                break;
+            case "barNames":
+                let id = target.id.slice(-1);
+                if (typeof this.state.barNames[id]) {
+                    let input = (target.value).toString();
+                    let newValue = (this.state.barNames[id] = input);
+                    this.state.barNames.splice(id, 1, newValue);
+                    this.setState({ barNames: this.state.barNames });
+                }
+                break;
+            case "barValues":
+                let id = target.id.slice(-1);
+                console.log("id: " + id);
+                if (typeof this.state.barValues[id]) {
+                    let input = (target.value).toString();
+                    let newValue = (this.state.barValues[id] = input); //values show as undefined in state. maybe use text input with filters instead as a work around
+                    this.state.barValues.splice(id, 1, newValue);
+                    this.setState({ barValues: this.state.barValues });
+                    break;
+                }
+            default:
+                this.setState({ [name]: value });
+                console.log({ [name]: value });
         }
-        else if (id.includes("barNames")) {
-            let id = target.id.slice(-1);
-            if (typeof this.state.barNames[id]) {
-                let input = target.value;
-                let newValue = (this.state.barNames[id] = input.toString());
-                this.state.barNames.splice(id, newValue);
-                this.setState({ barNames: this.state.barNames });
-            }
-        }
-        else if (id.includes("barValues")) {
-            let id = target.id.slice(-1);
-            console.log("id: " + id);
-            if (typeof this.state.barValues[id]) {
-                let input = target.value;
-                let newValue = (this.state.barValues[id] = input); //values show as undefined in state. maybe use text input with filters instead as a work around
-                this.state.barValues.splice(id, newValue);
-                this.setState({ barValues: this.state.barValues });
-            }
-        }
-        else {
-            console.log("else fired");
-            this.setState({ [name]: value });
-        }
-        console.log({[name]:value});
     }
 
     generateBarFields(event) {
@@ -117,7 +117,7 @@ class BarGraphForm extends React.Component {
         for (let i = 0; i <= input; i++) {
             ReactDOM.render(<ColorInput name={"barColors_" + i.toString()} id={"barColors_" + i.toString()} key={"barColors_" + i.toString()} defaultValue={"#000000"} onChange={this.handleChange} />, document.querySelector("#colors_" + (i).toString()));
             ReactDOM.render(<NameInput name={"barNames_" + i.toString()} id={"barNames_" + i.toString()} key={"barNames_" + i.toString()} placeholder={"barNames_" + i.toString()} onChange={this.handleChange} />, document.querySelector("#bar-names_" + (i).toString()));
-            ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange}/>, document.querySelector("#bar-values_" + (i).toString()));
+            ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange} />, document.querySelector("#bar-values_" + (i).toString()));
             // ReactDOM.render(<MapNumberInputs numBars={numBars} onChange={this.handleChange} name="barValues_" />, document.querySelector("#bar-values_" + (i - 1).toString()));
             // ReactDOM.render(<MapNameInputs numBars={numBars} onChange={this.handleChange} name="barNames_" />, document.querySelector("#bar-names_" + (i - 1).toString()));
             // ReactDOM.render(<MapColorFields numBars={numBars} onChange={this.handleChange} name="barColors_" />, document.querySelector("#colors_" + (i - 1).toString()));
