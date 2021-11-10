@@ -48,7 +48,7 @@ class BarGraphForm extends React.Component {
             numberOfBars: "",
             barNames: [],
             barColors_: [],
-            barValues: int[]
+            barValues: []
         };
 
         this.handleChange = this.handleChange.bind(this);
