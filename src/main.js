@@ -86,7 +86,7 @@ class BarGraphForm extends React.Component {
                 console.log("barNames")
                 if (typeof this.state.barValues[t_id]) {
                     let input = target.value;
-                    let newValue = (this.state.barValues[t_id] = input); //values show as undefined in state. maybe use text input with filters instead as a work around
+                    let newValue = (this.state.barValues[t_id] = input);
                     this.state.barValues.splice(t_id, 1, newValue);
                     this.setState({ barValues: this.state.barValues });
                     break;
@@ -115,15 +115,11 @@ class BarGraphForm extends React.Component {
 
         const groupsContainer = document.querySelector("#group-container");
         ReactDOM.render(<MapGroupInputs numBars={numBars} name="group-container_" />, groupsContainer);
-
-        for (let i = 0; i <= input; i++) {
+        numBars.forEach(function(item, i){
             ReactDOM.render(<ColorInput name={"barColors_" + i.toString()} id={"barColors_" + i.toString()} key={"barColors_" + i.toString()} defaultValue={"#000000"} onChange={this.handleChange} />, document.querySelector("#colors_" + (i).toString()));
             ReactDOM.render(<NameInput name={"barNames_" + i.toString()} id={"barNames_" + i.toString()} key={"barNames_" + i.toString()} placeholder={"barNames_" + i.toString()} onChange={this.handleChange} />, document.querySelector("#bar-names_" + (i).toString()));
             ReactDOM.render(<NumberInput name={"barValues_" + i.toString()} id={"barValues_" + i.toString()} key={"barValues_" + i.toString()} placeholder={0} onChange={this.handleChange} />, document.querySelector("#bar-values_" + (i).toString()));
-            // ReactDOM.render(<MapNumberInputs numBars={numBars} onChange={this.handleChange} name="barValues_" />, document.querySelector("#bar-values_" + (i - 1).toString()));
-            // ReactDOM.render(<MapNameInputs numBars={numBars} onChange={this.handleChange} name="barNames_" />, document.querySelector("#bar-names_" + (i - 1).toString()));
-            // ReactDOM.render(<MapColorFields numBars={numBars} onChange={this.handleChange} name="barColors_" />, document.querySelector("#colors_" + (i - 1).toString()));
-        }
+        })
     }
 
 
@@ -179,47 +175,23 @@ function GraphOrientation(props) {
 }
 
 function ColorInput(props) {
-    return <input type="color" name={props.name} id={props.id} onChange={props.onChange} />
-}
-
-function MapColorFields(props) {
-    let numColors = props.numBars;
-
-    return numColors.map((number, index) =>
-        <ColorInput name={props.name + index.toString()} id={props.name + index.toString()} key={props.name + index.toString()} defaultValue={"#000000"} onChange={props.onChange} />
-    );
+    return <input type="color" className="settings-element" name={props.name} id={props.id} onChange={props.onChange} />
 }
 
 function NameInput(props) {
-    return <input type="text" name={props.name} value={props.value} placeholder={props.placeholder} id={props.id} onChange={props.onChange} />
-}
-
-function MapNameInputs(props) {
-    let numInputs = props.numBars;
-
-    return numInputs.map((number, index) =>
-        <NameInput name={props.name + index.toString()} id={props.name + index.toString()} key={props.name + index.toString()} placeholder={props.name + index.toString()} onChange={props.onChange} />
-    );
+    return <input type="text" className="settings-element" name={props.name} value={props.value} placeholder={props.placeholder} id={props.id} onChange={props.onChange} />
 }
 
 function NumberInput(props) {
-    return <input type="number" name={props.name} id={props.id} placeholder={props.placeholder} onChange={props.onChange} />
-}
-
-function MapNumberInputs(props) {
-    let numInputs = props.numBars;
-
-    return numInputs.map((number, index) =>
-        <NumberInput name={props.name + index.toString()} id={props.name + index.toString()} key={props.name + index.toString()} placeholder={0} onChange={props.onChange} />
-    );
+    return <input type="number" className="settings-element" name={props.name} id={props.id} placeholder={props.placeholder} onChange={props.onChange} />
 }
 
 function GroupInputs(props) {
     return (
         <div className={props.id} id={props.id} name={props.id}>
-            <div id={props.nameId}></div>
-            <div id={props.colorId}></div>
-            <div id={props.numId}></div>
+            <div className="settings-element" id={props.nameId}></div>
+            <div className="settings-element" id={props.colorId}></div>
+            <div className="settings-element" id={props.numId}></div>
         </div>
     );
 }

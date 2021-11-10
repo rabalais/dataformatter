@@ -131,7 +131,7 @@ var BarGraphForm = function (_React$Component2) {
                     console.log("barNames");
                     if (_typeof(this.state.barValues[t_id])) {
                         var _input = target.value;
-                        var _newValue2 = this.state.barValues[t_id] = _input; //values show as undefined in state. maybe use text input with filters instead as a work around
+                        var _newValue2 = this.state.barValues[t_id] = _input;
                         this.state.barValues.splice(t_id, 1, _newValue2);
                         this.setState({ barValues: this.state.barValues });
                         break;
@@ -161,15 +161,11 @@ var BarGraphForm = function (_React$Component2) {
 
             var groupsContainer = document.querySelector("#group-container");
             ReactDOM.render(React.createElement(MapGroupInputs, { numBars: numBars, name: "group-container_" }), groupsContainer);
-
-            for (var _i = 0; _i <= input; _i++) {
-                ReactDOM.render(React.createElement(ColorInput, { name: "barColors_" + _i.toString(), id: "barColors_" + _i.toString(), key: "barColors_" + _i.toString(), defaultValue: "#000000", onChange: this.handleChange }), document.querySelector("#colors_" + _i.toString()));
-                ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + _i.toString(), id: "barNames_" + _i.toString(), key: "barNames_" + _i.toString(), placeholder: "barNames_" + _i.toString(), onChange: this.handleChange }), document.querySelector("#bar-names_" + _i.toString()));
-                ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + _i.toString(), id: "barValues_" + _i.toString(), key: "barValues_" + _i.toString(), placeholder: 0, onChange: this.handleChange }), document.querySelector("#bar-values_" + _i.toString()));
-                // ReactDOM.render(<MapNumberInputs numBars={numBars} onChange={this.handleChange} name="barValues_" />, document.querySelector("#bar-values_" + (i - 1).toString()));
-                // ReactDOM.render(<MapNameInputs numBars={numBars} onChange={this.handleChange} name="barNames_" />, document.querySelector("#bar-names_" + (i - 1).toString()));
-                // ReactDOM.render(<MapColorFields numBars={numBars} onChange={this.handleChange} name="barColors_" />, document.querySelector("#colors_" + (i - 1).toString()));
-            }
+            numBars.forEach(function (item, i) {
+                ReactDOM.render(React.createElement(ColorInput, { name: "barColors_" + i.toString(), id: "barColors_" + i.toString(), key: "barColors_" + i.toString(), defaultValue: "#000000", onChange: this.handleChange }), document.querySelector("#colors_" + i.toString()));
+                ReactDOM.render(React.createElement(NameInput, { name: "barNames_" + i.toString(), id: "barNames_" + i.toString(), key: "barNames_" + i.toString(), placeholder: "barNames_" + i.toString(), onChange: this.handleChange }), document.querySelector("#bar-names_" + i.toString()));
+                ReactDOM.render(React.createElement(NumberInput, { name: "barValues_" + i.toString(), id: "barValues_" + i.toString(), key: "barValues_" + i.toString(), placeholder: 0, onChange: this.handleChange }), document.querySelector("#bar-values_" + i.toString()));
+            });
         }
     }, {
         key: "handleSubmit",
@@ -247,48 +243,24 @@ function GraphOrientation(props) {
 }
 
 function ColorInput(props) {
-    return React.createElement("input", { type: "color", name: props.name, id: props.id, onChange: props.onChange });
-}
-
-function MapColorFields(props) {
-    var numColors = props.numBars;
-
-    return numColors.map(function (number, index) {
-        return React.createElement(ColorInput, { name: props.name + index.toString(), id: props.name + index.toString(), key: props.name + index.toString(), defaultValue: "#000000", onChange: props.onChange });
-    });
+    return React.createElement("input", { type: "color", className: "settings-element", name: props.name, id: props.id, onChange: props.onChange });
 }
 
 function NameInput(props) {
-    return React.createElement("input", { type: "text", name: props.name, value: props.value, placeholder: props.placeholder, id: props.id, onChange: props.onChange });
-}
-
-function MapNameInputs(props) {
-    var numInputs = props.numBars;
-
-    return numInputs.map(function (number, index) {
-        return React.createElement(NameInput, { name: props.name + index.toString(), id: props.name + index.toString(), key: props.name + index.toString(), placeholder: props.name + index.toString(), onChange: props.onChange });
-    });
+    return React.createElement("input", { type: "text", className: "settings-element", name: props.name, value: props.value, placeholder: props.placeholder, id: props.id, onChange: props.onChange });
 }
 
 function NumberInput(props) {
-    return React.createElement("input", { type: "number", name: props.name, id: props.id, placeholder: props.placeholder, onChange: props.onChange });
-}
-
-function MapNumberInputs(props) {
-    var numInputs = props.numBars;
-
-    return numInputs.map(function (number, index) {
-        return React.createElement(NumberInput, { name: props.name + index.toString(), id: props.name + index.toString(), key: props.name + index.toString(), placeholder: 0, onChange: props.onChange });
-    });
+    return React.createElement("input", { type: "number", className: "settings-element", name: props.name, id: props.id, placeholder: props.placeholder, onChange: props.onChange });
 }
 
 function GroupInputs(props) {
     return React.createElement(
         "div",
         { className: props.id, id: props.id, name: props.id },
-        React.createElement("div", { id: props.nameId }),
-        React.createElement("div", { id: props.colorId }),
-        React.createElement("div", { id: props.numId })
+        React.createElement("div", { className: "settings-element", id: props.nameId }),
+        React.createElement("div", { className: "settings-element", id: props.colorId }),
+        React.createElement("div", { className: "settings-element", id: props.numId })
     );
 }
 
