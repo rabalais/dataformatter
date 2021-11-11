@@ -82,14 +82,18 @@ var BarGraphForm = function (_React$Component2) {
 
         _this2.state = {
             orientation: "vertical",
-            numberOfBars: "",
+            numberOfBars: undefined,
+            graphTitle: undefined,
+            scale: undefined,
+            scaleTitle: undefined,
+            step: undefined,
             barNames: [],
             barColors_: [],
             barValues: []
         };
 
         _this2.handleChange = _this2.handleChange.bind(_this2);
-        _this2.handleSubmit = _this2.handleSubmit.bind(_this2);
+        _this2.handleApply = _this2.handleApply.bind(_this2);
         _this2.generateBarFields = _this2.generateBarFields.bind(_this2);
         return _this2;
     }
@@ -105,7 +109,6 @@ var BarGraphForm = function (_React$Component2) {
 
             switch (true) {
                 case id.includes("barColors"):
-                    console.log("barColors");
                     if (_typeof(this.state.barColors_[t_id])) {
                         var newValue = this.state.barColors_[t_id] = value;
                         this.state.barColors_.splice(t_id, 1, newValue);
@@ -113,7 +116,6 @@ var BarGraphForm = function (_React$Component2) {
                     }
                     break;
                 case id.includes("barNames"):
-                    console.log("barNames");
                     if (_typeof(this.state.barNames[t_id])) {
                         var input = target.value;
                         var _newValue = this.state.barNames[t_id] = input;
@@ -122,8 +124,6 @@ var BarGraphForm = function (_React$Component2) {
                     }
                     break;
                 case id.includes("barValues"):
-                    console.log("id: " + id);
-                    console.log("barNames");
                     if (_typeof(this.state.barValues[t_id])) {
                         var _input = target.value;
                         var _newValue2 = this.state.barValues[t_id] = _input;
@@ -132,9 +132,7 @@ var BarGraphForm = function (_React$Component2) {
                         break;
                     }
                 default:
-                    console.log("default");
                     this.setState(_defineProperty({}, name, value));
-                    console.log(_defineProperty({}, name, value));
             }
         }
     }, {
@@ -182,35 +180,22 @@ var BarGraphForm = function (_React$Component2) {
             }
         }
     }, {
-        key: "handleSubmit",
-        value: function handleSubmit(event) {
-            var stateArray = Object.values(this.state.barValues.toString());
-            alert(stateArray);
+        key: "handleApply",
+        value: function handleApply(event) {
             event.preventDefault();
+            console.log("init graph");
+            console.log(this.state.graphTitle);
+            initBarGraph(this.state.barNames, this.state.barValues, this.state.barColors_, this.state.numberOfBars, this.state.step, this.state.scale, this.state.scaleTitle, this.state.graphTitle);
         }
     }, {
         key: "render",
         value: function render() {
             return React.createElement(
                 "form",
-                { onSubmit: this.handleSubmit },
+                null,
                 React.createElement(
                     "div",
                     { className: "flex-container" },
-                    React.createElement(
-                        "div",
-                        { className: "flex-item" },
-                        React.createElement(
-                            "h4",
-                            { className: "category-title" },
-                            "Orientation"
-                        ),
-                        React.createElement(
-                            "div",
-                            { className: "category" },
-                            React.createElement(GraphOrientation, { onChange: this.handleChange })
-                        )
-                    ),
                     React.createElement(
                         "div",
                         { className: "flex-item" },
@@ -227,10 +212,56 @@ var BarGraphForm = function (_React$Component2) {
                                 null,
                                 React.createElement(
                                     "label",
-                                    { "for": "number-of-bars" },
-                                    " Number of Bars:\xA0"
+                                    { "for": "graph-title" },
+                                    "Graph Title"
                                 ),
-                                React.createElement("input", { type: "number", className: "custom-number-input", id: "number-of-bars", name: "number-of-bars", min: "1", placeholder: "0", value: this.state.numberOfBars, onChange: this.generateBarFields })
+                                React.createElement("input", { type: "text", className: "settings-element", id: "graph-title", name: "graphTitle", placeholder: "Graph Title", value: this.state.graphTitle, onChange: this.handleChange }),
+                                React.createElement(
+                                    "label",
+                                    { "for": "number-of-bars" },
+                                    " Number of Bars"
+                                ),
+                                React.createElement("input", { type: "number", className: "custom-number-input settings-element", id: "number-of-bars", name: "number-of-bars", min: "1", placeholder: "0", value: this.state.numberOfBars, onChange: this.generateBarFields }),
+                                React.createElement(
+                                    "label",
+                                    null,
+                                    "Orientation"
+                                ),
+                                React.createElement(GraphOrientation, { onChange: this.handleChange }),
+                                React.createElement(
+                                    "div",
+                                    { className: "flex-container" },
+                                    React.createElement(
+                                        "div",
+                                        { className: "flex-item" },
+                                        React.createElement(
+                                            "label",
+                                            null,
+                                            "Scale Title"
+                                        ),
+                                        React.createElement("input", { type: "text", className: "settings-element", id: "scale-title", name: "scaleTitle", placeholder: "Scale Title", value: this.state.scaleTitle, onChange: this.handleChange })
+                                    ),
+                                    React.createElement(
+                                        "div",
+                                        { className: "flex-item" },
+                                        React.createElement(
+                                            "label",
+                                            null,
+                                            "Scale"
+                                        ),
+                                        React.createElement("input", { type: "number", className: "custom-number-input settings-element", id: "scale", name: "scale", min: "1", placeholder: "0", value: this.state.scale, onChange: this.handleChange })
+                                    ),
+                                    React.createElement(
+                                        "div",
+                                        { className: "flex-item" },
+                                        React.createElement(
+                                            "label",
+                                            null,
+                                            "Step"
+                                        ),
+                                        React.createElement("input", { type: "number", className: "custom-number-input settings-element", id: "step", name: "step", min: "1", placeholder: "0", value: this.state.step, onChange: this.handleChange })
+                                    )
+                                )
                             )
                         )
                     )
@@ -239,7 +270,11 @@ var BarGraphForm = function (_React$Component2) {
                 React.createElement(
                     "div",
                     { className: "clearfix" },
-                    React.createElement("input", { type: "submit", id: "submit", value: "Apply", onSubmit: this.handleSubmit }),
+                    React.createElement(
+                        "button",
+                        { type: "button", id: "apply", onClick: this.handleApply },
+                        "Apply"
+                    ),
                     React.createElement(
                         "button",
                         { type: "button", id: "save-to-pdf" },
@@ -311,10 +346,6 @@ function MapGroupInputs(props) {
     return numInputs.map(function (number, index) {
         return React.createElement(GroupInputs, { className: "bar-group", id: "barGroup_" + index.toString(), key: "barGroup_" + index.toString(), labelId: "label_" + index.toString(), nameId: "bar-names_" + index.toString(), colorId: "colors_" + index.toString(), numId: "bar-values_" + index.toString() });
     });
-}
-
-function AxisTitle(props) {
-    return React.createElement("input", { type: "text", className: "settings-element", name: props.name, value: props.value, placeholder: props.placeholder, onChange: props.onChange });
 }
 
 function getID(id) {

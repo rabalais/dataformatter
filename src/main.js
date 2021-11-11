@@ -44,14 +44,18 @@ class BarGraphForm extends React.Component {
         super(props);
         this.state = {
             orientation: "vertical",
-            numberOfBars: "",
+            numberOfBars: undefined,
+            graphTitle: undefined,
+            scale: undefined,
+            scaleTitle: undefined,
+            step: undefined,
             barNames: [],
             barColors_: [],
             barValues: []
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleApply = this.handleApply.bind(this);
         this.generateBarFields = this.generateBarFields.bind(this);
     }
 
@@ -64,7 +68,6 @@ class BarGraphForm extends React.Component {
 
         switch (true) {
             case id.includes("barColors"):
-                console.log("barColors")
                 if (typeof this.state.barColors_[t_id]) {
                     let newValue = (this.state.barColors_[t_id] = value);
                     this.state.barColors_.splice(t_id, 1, newValue);
@@ -72,7 +75,6 @@ class BarGraphForm extends React.Component {
                 }
                 break;
             case id.includes("barNames"):
-                console.log("barNames")
                 if (typeof this.state.barNames[t_id]) {
                     let input = target.value;
                     let newValue = (this.state.barNames[t_id] = input);
@@ -81,8 +83,6 @@ class BarGraphForm extends React.Component {
                 }
                 break;
             case id.includes("barValues"):
-                console.log("id: " + id);
-                console.log("barNames")
                 if (typeof this.state.barValues[t_id]) {
                     let input = target.value;
                     let newValue = (this.state.barValues[t_id] = input);
@@ -91,9 +91,7 @@ class BarGraphForm extends React.Component {
                     break;
                 }
             default:
-                console.log("default")
                 this.setState({ [name]: value });
-                console.log({ [name]: value });
         }
     }
 
@@ -136,35 +134,48 @@ class BarGraphForm extends React.Component {
     }
 
 
-    handleSubmit(event) {
-        const stateArray = Object.values(this.state.barValues.toString());
-        alert(stateArray);
+    handleApply(event) {
         event.preventDefault();
+        console.log("init graph");
+        console.log(this.state.graphTitle);
+        initBarGraph(this.state.barNames,this.state.barValues,this.state.barColors_,this.state.numberOfBars,this.state.step,this.state.scale,this.state.scaleTitle,this.state.graphTitle);
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form>
                 <div className="flex-container">
-                    <div className="flex-item">
-                        <h4 className="category-title">Orientation</h4>
-                        <div className="category">
-                            <GraphOrientation onChange={this.handleChange} />
-                        </div>
-                    </div>
                     <div className="flex-item">
                         <h4 className="category-title">Settings</h4>
                         <div className="category">
                             <div>
-                                <label for="number-of-bars"> Number of Bars:&nbsp;</label>
-                                <input type="number" className="custom-number-input" id="number-of-bars" name="number-of-bars" min="1" placeholder="0" value={this.state.numberOfBars} onChange={this.generateBarFields} />
+                                <label for="graph-title">Graph Title</label>
+                                <input type="text" className="settings-element" id="graph-title" name="graphTitle" placeholder="Graph Title" value={this.state.graphTitle} onChange={this.handleChange} />
+                                <label for="number-of-bars"> Number of Bars</label>
+                                <input type="number" className="custom-number-input settings-element" id="number-of-bars" name="number-of-bars" min="1" placeholder="0" value={this.state.numberOfBars} onChange={this.generateBarFields} />
+                                <label>Orientation</label>
+                                <GraphOrientation onChange={this.handleChange} />
+                                <div className="flex-container">
+                                <div className="flex-item">
+                                    <label>Scale Title</label>
+                                    <input type="text" className="settings-element" id="scale-title" name="scaleTitle" placeholder="Scale Title" value={this.state.scaleTitle} onChange={this.handleChange} />
+                                </div>
+                                <div className="flex-item">
+                                    <label>Scale</label>
+                                    <input type="number" className="custom-number-input settings-element" id="scale" name="scale" min="1" placeholder="0" value={this.state.scale} onChange={this.handleChange} />
+                                </div>
+                                <div className="flex-item">
+                                    <label>Step</label>
+                                    <input type="number" className="custom-number-input settings-element" id="step" name="step" min="1" placeholder="0" value={this.state.step} onChange={this.handleChange} />
+                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="category justify-center" id="group-container"></div>
                 <div className="clearfix">
-                    <input type="submit" id="submit" value="Apply" onSubmit={this.handleSubmit} />
+                    <button type="button" id="apply" onClick={this.handleApply}>Apply</button>
                     <button type="button" id="save-to-pdf">Save to PDF</button>
                 </div>
             </form>
@@ -220,13 +231,10 @@ function MapGroupInputs(props) {
     );
 }
 
-function AxisTitle(props) {
-    return <input type="text" className="settings-element" name={props.name} value={props.value} placeholder={props.placeholder} onChange={props.onChange} />
-}
-
 function getID(id) {
     return id.split("_")[1];
 }
+
 
 const domContainer = document.querySelector("#graph-select");
 ReactDOM.render(<GraphType />, domContainer);
