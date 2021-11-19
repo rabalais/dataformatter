@@ -63,6 +63,7 @@ function initBarGraph(itemName, itemValue, itemColor, sections, step, scale, sca
     context.scale(xScale, -1 * yScale);
 
     for(i=0;i<(sections); i++){
+        context.fillStyle = itemColor[i];
         context.fillRect(i+1,0,0.3, itemValue[i]);
     }
 
